@@ -1,2 +1,3 @@
-# wh40kpaint
-Interactive Citadel color chart
+# Warhammer 40k paint
+============================
+Interactive color chart for Games Workshop Citadel Miniatures
