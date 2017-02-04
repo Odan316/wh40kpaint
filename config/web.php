@@ -7,6 +7,7 @@ $params = array_merge(
 
 $config = [
     'id' => 'basic',
+    'name' => 'Wh40kPaint',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'components' => [
@@ -45,6 +46,7 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'admin' => 'site/login'
             ],
         ],
     ],
