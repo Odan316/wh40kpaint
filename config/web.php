@@ -46,7 +46,9 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'admin' => 'site/login'
+                'login' => 'site/login',
+                'admin/paint' => 'admin-paint/index',
+                'admin/paint/<action:[\w|\-]+>' => 'admin-paint/<action>'
             ],
         ],
     ],
