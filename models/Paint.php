@@ -12,7 +12,10 @@ use Yii;
  * @property string $title
  * @property string $hex_code
  *
+ * @property string $tTitle
  * @property string $typeName
+ *
+ * @see PaintQuery
  */
 class Paint extends \yii\db\ActiveRecord
 {

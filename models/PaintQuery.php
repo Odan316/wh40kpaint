@@ -9,10 +9,13 @@ namespace app\models;
  */
 class PaintQuery extends \yii\db\ActiveQuery
 {
-    /*public function active()
+    /**
+     * @return PaintQuery
+     */
+    public function bases()
     {
-        return $this->andWhere('[[status]]=1');
-    }*/
+        return $this->andWhere(['type' => Paint::TYPE_BASE]);
+    }
 
     /**
      * @inheritdoc

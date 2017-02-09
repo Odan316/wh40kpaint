@@ -14,6 +14,8 @@ use yii\filters\VerbFilter;
  */
 class AdminPaintController extends Controller
 {
+    public $layout = 'admin';
+
     /**
      * @inheritdoc
      */
