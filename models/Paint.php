@@ -11,6 +11,7 @@ use Yii;
  * @property integer $type
  * @property string $title
  * @property string $hex_code
+ * @property boolean $is_metal
  *
  * @property string $tTitle
  * @property string $typeName
@@ -41,7 +42,7 @@ class Paint extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [ [ 'type', 'title', 'hex_code' ], 'required' ],
+            [ [ 'type', 'title', 'hex_code', 'is_metal' ], 'required' ],
             [ [ 'type' ], 'integer' ],
             [ [ 'title' ], 'string', 'max' => 32 ],
             [ [ 'hex_code' ], 'string', 'max' => 8 ],
@@ -49,7 +50,9 @@ class Paint extends \yii\db\ActiveRecord
                 'type',
                 'in',
                 'range' => array_keys(self::getTypes())
-            ]
+            ],
+            [ [ 'is_metal' ], 'boolean' ],
+            [ [ 'is_metal' ], 'default', 'value' => false ]
         ];
     }
 
@@ -63,6 +66,7 @@ class Paint extends \yii\db\ActiveRecord
             'type'     => Yii::t('app', 'Type'),
             'title'    => Yii::t('app', 'Title'),
             'hex_code' => Yii::t('app', 'Hex Code'),
+            'is_metal' => Yii::t('app', 'Is Metal'),
         ];
     }
 

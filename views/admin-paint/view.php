@@ -24,6 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
+        <?= Html::a(Yii::t('app', 'Create new'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= DetailView::widget([
@@ -38,6 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'title',
             'hex_code',
+            'is_metal:boolean',
         ],
     ]) ?>
 

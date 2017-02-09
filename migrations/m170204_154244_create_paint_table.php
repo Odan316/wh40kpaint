@@ -16,7 +16,8 @@ class m170204_154244_create_paint_table extends Migration
             'id' => $this->primaryKey(),
             'type' => $this->integer(11)->notNull(),
             'title' => $this->string(32)->notNull(),
-            'hex_code' => $this->string(8)->notNull()
+            'hex_code' => $this->string(8)->notNull(),
+            'is_metal' => $this->boolean()->notNull()->defaultValue(false)
         ]);
     }
 

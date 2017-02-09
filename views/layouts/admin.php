@@ -35,6 +35,15 @@ AppAsset::register($this);
         ],
     ]);
     echo Nav::widget([
+        'options' => ['class' => 'navbar-nav navbar-left'],
+        'items' => [
+            [
+                'label' => 'Paints',
+                'url' => ['admin/paint']
+            ]
+        ]
+    ]);
+    echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' =>
             Yii::$app->user->isGuest ? [] : ([
