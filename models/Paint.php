@@ -27,6 +27,8 @@ class Paint extends \yii\db\ActiveRecord
     const TYPE_GLAZE = 50;
     const TYPE_TEXTURE = 60;
     const TYPE_TECHNICAL = 70;
+    const TYPE_EDGE = 80;
+    const TYPE_SPRAY = 90;
 
     /**
      * @inheritdoc

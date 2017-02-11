@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\PaintSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -16,25 +17,31 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Create Paint'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Create Paint'), [ 'create' ], [ 'class' => 'btn btn-success' ]) ?>
     </p>
-<?php Pjax::begin(); ?>    <?= GridView::widget([
+    <?php Pjax::begin(); ?>
+    <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
+        'filterModel'  => $searchModel,
+        'tableOptions' => ['class' => 'table table-striped table-bordered paintsTable'],
+        'columns'      => [
+            [ 'class' => 'yii\grid\SerialColumn' ],
             'id',
             [
                 'attribute' => 'type',
-                'value' => function($model){
+                'value'     => function ($model) {
                     return $model->typeName;
                 }
             ],
             'title',
-            'hex_code',
-
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'attribute' => 'hex_code',
+                'format'    => 'raw',
+                'value'     => function ($model) {
+                    return "<p class='paintColor' style='background-color: {$model->hex_code}'>&nbsp;</p>";
+                }
+            ],
+            [ 'class' => 'yii\grid\ActionColumn' ],
         ],
     ]); ?>
-<?php Pjax::end(); ?></div>
+    <?php Pjax::end(); ?></div>
