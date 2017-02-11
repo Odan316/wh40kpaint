@@ -18,6 +18,14 @@ class PaintQuery extends \yii\db\ActiveQuery
     }
 
     /**
+     * @return PaintQuery
+     */
+    public function layers()
+    {
+        return $this->andWhere(['type' => Paint::TYPE_LAYER]);
+    }
+
+    /**
      * @inheritdoc
      * @return Paint[]|array
      */

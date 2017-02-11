@@ -38,7 +38,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             'title',
-            'hex_code',
+            [
+                'attribute' => 'hex_code',
+                'format'    => 'raw',
+                'value'     => function ($model) {
+                    return "<p class='paintColor' style='background-color: {$model->hex_code}'>&nbsp;</p>";
+                }
+            ],
             'is_metal:boolean',
         ],
     ]) ?>

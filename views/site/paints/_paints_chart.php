@@ -7,6 +7,7 @@ use app\models\Paint;
 
 ?>
 <div class="row">
+    <h3><?= $paints[0]->typeName ?></h3>
     <?php foreach ($paints as $paint) { ?>
         <div class="col-lg-2">
             <div class="paintCard">
