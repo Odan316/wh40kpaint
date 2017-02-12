@@ -100,6 +100,7 @@ body {
 }
 .paintCard h4 {
   min-height: 33px;
+  margin-bottom: 0;
 }
 .paintCard h4.long {
   font-size: 15px;
