@@ -8,10 +8,19 @@ use app\models\Paint;
 ?>
 <div class="row">
     <h3><?= $paints[0]->typeName ?>&nbsp;(<?= count($paints) ?>)</h3>
-    <?php foreach ($paints as $paint) { ?>
+    <?php foreach ($paints as $paint) {
+        $addClass = '';
+        if($paint->is_metal){
+            $addClass = 'metallic';
+        }
+        if($paint->type == Paint::TYPE_SHADE){
+            $addClass = 'shade';
+        }
+
+        ?>
         <div class="col-lg-2">
             <div class="paintCard">
-                <div class="paintPreview <?= $paint->is_metal ? 'metallic' : ''?>" style="background-color: <?= $paint->hex_code ?>"></div>
+                <div class="paintPreview <?= $addClass?>" style="background-color: <?= $paint->hex_code ?>"></div>
                 <h4 class="text-center <?= mb_strlen($paint->title) > 17 ? 'long' : ''?>"><?= $paint->title ?></h4>
             </div>
         </div>
