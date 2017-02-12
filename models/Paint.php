@@ -29,6 +29,7 @@ class Paint extends \yii\db\ActiveRecord
     const TYPE_TECHNICAL = 70;
     const TYPE_EDGE = 80;
     const TYPE_SPRAY = 90;
+    const TYPE_AIR = 100;
 
     /**
      * @inheritdoc
@@ -97,7 +98,8 @@ class Paint extends \yii\db\ActiveRecord
             self::TYPE_TEXTURE   => Yii::t('app', 'Texture'),
             self::TYPE_TECHNICAL => Yii::t('app', 'Technical'),
             self::TYPE_EDGE      => Yii::t('app', 'Edge'),
-            self::TYPE_SPRAY     => Yii::t('app', 'Spray')
+            self::TYPE_SPRAY     => Yii::t('app', 'Spray'),
+            self::TYPE_AIR       => Yii::t('app', 'Air')
         ];
     }
 
