@@ -32,6 +32,13 @@ class PaintQuery extends \yii\db\ActiveQuery
     {
         return $this->andWhere(['type' => Paint::TYPE_SHADE]);
     }
+    /**
+     * @return PaintQuery
+     */
+    public function dry()
+    {
+        return $this->andWhere(['type' => Paint::TYPE_DRY]);
+    }
 
     /**
      * @inheritdoc

@@ -11,6 +11,7 @@ $this->title = Yii::$app->name;
 $paintsBase = Paint::find()->bases()->all();
 $paintsLayer = Paint::find()->layers()->all();
 $paintsShade = Paint::find()->shades()->all();
+$paintsDry = Paint::find()->dry()->all();
 
 ?>
 <div class="site-index">
@@ -21,5 +22,6 @@ $paintsShade = Paint::find()->shades()->all();
     <?= $this->render('paints/_paints_chart', [ 'paints' => $paintsBase ]) ?>
     <?= $this->render('paints/_paints_chart', [ 'paints' => $paintsLayer ]) ?>
     <?= $this->render('paints/_paints_chart', [ 'paints' => $paintsShade ]) ?>
+    <?= $this->render('paints/_paints_chart', [ 'paints' => $paintsDry ]) ?>
 
 </div>
