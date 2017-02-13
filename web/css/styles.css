@@ -79,6 +79,9 @@ body {
   -webkit-border-radius: 25px;
   -moz-border-radius: 25px;
   border-radius: 25px;
+  font-size: 12px;
+  line-height: 50px;
+  text-align: center;
 }
 .paintCard .paintPreview.metallic:after {
   content: "";
@@ -89,7 +92,7 @@ body {
   height: 50px;
   background: radial-gradient(circle closest-side at 30px 30px, white, transparent);
 }
-.paintCard .paintPreview.shade:after {
+.paintCard .paintPreview.fleck:after {
   content: "";
   position: absolute;
   top: -1px;

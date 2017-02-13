@@ -31,6 +31,8 @@ class Paint extends \yii\db\ActiveRecord
     const TYPE_SPRAY = 90;
     const TYPE_AIR = 100;
 
+    const TRANSPARENT = 'transp';
+
     /**
      * @inheritdoc
      */
@@ -103,7 +105,7 @@ class Paint extends \yii\db\ActiveRecord
         ];
     }
 
-    public function getTypeName()
+    public function getTypeName($type = null)
     {
         return self::getTypes()[$this->type];
     }
