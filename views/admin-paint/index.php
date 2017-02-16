@@ -26,7 +26,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'tableOptions' => ['class' => 'table table-striped table-bordered paintsTable'],
         'columns'      => [
             [ 'class' => 'yii\grid\SerialColumn' ],
-            'id',
+            [
+                'attribute' => 'id',
+                'headerOptions' => ['class' => 'idColumn']
+            ],
             [
                 'attribute' => 'type',
                 'value'     => function ($model) {
@@ -36,11 +39,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'title',
             [
                 'attribute' => 'hex_code',
+                'label' => Yii::t('app', 'Color'),
                 'format'    => 'raw',
                 'value'     => function ($model) {
                     return "<p class='paintColor' style='background-color: {$model->hex_code}'>&nbsp;</p>";
                 }
             ],
+            'hex_code',
             [ 'class' => 'yii\grid\ActionColumn' ],
         ],
     ]); ?>

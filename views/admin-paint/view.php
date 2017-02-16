@@ -40,11 +40,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'title',
             [
                 'attribute' => 'hex_code',
+                'label' => Yii::t('app', 'Color'),
                 'format'    => 'raw',
                 'value'     => function ($model) {
                     return "<p class='paintColor' style='background-color: {$model->hex_code}'>&nbsp;</p>";
                 }
             ],
+            'hex_code',
             'is_metal:boolean',
         ],
     ]) ?>
