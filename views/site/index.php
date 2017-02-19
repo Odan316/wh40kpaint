@@ -14,7 +14,7 @@ $this->title = Yii::$app->name;
 
     <h3 class="text-center">for Games Workshop Citadel Miniatures</h3>
 
-    <?= $this->render('paints/_paints_chart', [ 'paints' => Paint::find()->bases()->all() ]) ?>
+    <?= $this->render('paints/_paints_chart', [ 'paints' => Paint::find()->bases()->byColor()->all() ]) ?>
     <?= $this->render('paints/_paints_chart', [ 'paints' => Paint::find()->layers()->all() ]) ?>
     <?= $this->render('paints/_paints_chart', [ 'paints' => Paint::find()->shades()->all() ]) ?>
     <?= $this->render('paints/_paints_chart', [ 'paints' => Paint::find()->dry()->all() ]) ?>

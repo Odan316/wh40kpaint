@@ -12,9 +12,13 @@ use Yii;
  * @property string $title
  * @property string $hex_code
  * @property boolean $is_metal
+ * @property float $hsv_h
+ * @property float $hsv_s
+ * @property float $hsv_v
  *
  * @property string $tTitle
  * @property string $typeName
+ * @property array $hsv
  *
  * @see PaintQuery
  */
@@ -57,7 +61,8 @@ class Paint extends \yii\db\ActiveRecord
                 'range' => array_keys(self::getTypes())
             ],
             [ [ 'is_metal' ], 'boolean' ],
-            [ [ 'is_metal' ], 'default', 'value' => false ]
+            [ [ 'is_metal' ], 'default', 'value' => false ],
+            [ [ 'hsv_h', 'hsv_s', 'hsv_v' ], 'number' ]
         ];
     }
 
@@ -105,9 +110,22 @@ class Paint extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * @param integer|null $type
+     * @return string
+     */
     public function getTypeName($type = null)
     {
-        return self::getTypes()[$this->type];
+        return isset(self::getTypes()[$this->type]) ? self::getTypes()[$this->type] : Yii::t('app',
+            'Unknown paint type');
+    }
+
+    /**
+     * @return array
+     */
+    public function getHSV()
+    {
+        return [ $this->hsv_h, $this->hsv_s, $this->hsv_v ];
     }
 
 }

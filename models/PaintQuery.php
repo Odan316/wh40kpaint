@@ -92,6 +92,14 @@ class PaintQuery extends ActiveQuery
     }
 
     /**
+     * @return PaintQuery
+     */
+    public function byColor()
+    {
+        return $this->orderBy(['hsv_h' => SORT_ASC]);
+    }
+
+    /**
      * @inheritdoc
      * @return Paint[]|array
      */
