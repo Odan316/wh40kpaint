@@ -12,13 +12,21 @@ use Yii;
  * @property string $title
  * @property string $hex_code
  * @property boolean $is_metal
- * @property float $hsv_h
- * @property float $hsv_s
- * @property float $hsv_v
+ * @property integer $rgb_r
+ * @property integer $rgb_g
+ * @property integer $rgb_b
+ * @property integer $hsv_h
+ * @property integer $hsv_s
+ * @property integer $hsv_v
+ * @property integer $hsl_h
+ * @property integer $hsl_s
+ * @property integer $hsl_l
  *
  * @property string $tTitle
  * @property string $typeName
+ * @property array $rgb
  * @property array $hsv
+ * @property array $hsl
  *
  * @see PaintQuery
  */
@@ -36,6 +44,10 @@ class Paint extends \yii\db\ActiveRecord
     const TYPE_AIR = 100;
 
     const TRANSPARENT = 'transp';
+
+    protected $_rgb = null;
+    protected $_hsv = null;
+    protected $_hsl = null;
 
     /**
      * @inheritdoc
@@ -62,7 +74,9 @@ class Paint extends \yii\db\ActiveRecord
             ],
             [ [ 'is_metal' ], 'boolean' ],
             [ [ 'is_metal' ], 'default', 'value' => false ],
-            [ [ 'hsv_h', 'hsv_s', 'hsv_v' ], 'number' ]
+            [ [ 'rgb_r', 'rgb_g', 'rgb_b' ], 'integer' ],
+            [ [ 'hsv_h', 'hsv_s', 'hsv_v' ], 'integer' ],
+            [ [ 'hsl_h', 'hsl_s', 'hsl_l' ], 'integer' ]
         ];
     }
 
@@ -121,11 +135,72 @@ class Paint extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return array
+     * @return RGB
+     */
+    public function getRGB()
+    {
+        if ($this->_rgb == null) {
+            $this->_rgb = new RGB($this->rgb_r, $this->rgb_b, $this->rgb_g);
+        }
+        return $this->_rgb;
+    }
+
+    /**
+     * @param RGB $rgb
+     */
+    public function setRGB($rgb)
+    {
+        $this->_rgb = $rgb;
+
+        $this->rgb_r = $rgb->r;
+        $this->rgb_g = $rgb->g;
+        $this->rgb_b = $rgb->b;
+    }
+
+    /**
+     * @return HSL
+     */
+    public function getHSL()
+    {
+        if ($this->_hsl == null) {
+            $this->_hsl = new HSL($this->hsl_h, $this->hsl_s, $this->hsl_l);
+        }
+        return $this->_hsl;
+    }
+
+    /**
+     * @param HSL $hsl
+     */
+    public function setHSL($hsl)
+    {
+        $this->_hsl = $hsl;
+
+        $this->hsl_h = $hsl->h;
+        $this->hsl_s = $hsl->s;
+        $this->hsl_l = $hsl->l;
+    }
+
+    /**
+     * @return HSL
      */
     public function getHSV()
     {
-        return [ $this->hsv_h, $this->hsv_s, $this->hsv_v ];
+        if ($this->_hsv == null) {
+            $this->_hsv = new HSV($this->hsv_h, $this->hsv_s, $this->hsv_v);
+        }
+        return $this->_hsv;
+    }
+
+    /**
+     * @param HSV $hsv
+     */
+    public function setHSV($hsv)
+    {
+        $this->_hsv = $hsv;
+
+        $this->hsv_h = $hsv->h;
+        $this->hsv_s = $hsv->s;
+        $this->hsv_v = $hsv->v;
     }
 
 }

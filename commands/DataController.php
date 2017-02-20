@@ -15,20 +15,26 @@ use yii\helpers\VarDumper;
  */
 class DataController extends Controller
 {
-    public function actionHsv()
+    public function actionConvertColors()
     {
         $paints = Paint::find()->all();
+
         foreach($paints as $paint){
             $hex = $paint->hex_code;
             if(strpos($paint->hex_code, '#') === false){
                 $hex = '#FFFFFF';
             }
-            $hsv = ColorHelper::HEXtoHSV($hex);
+            $rgb = ColorHelper::HEXtoRGB($hex);
+            $hsv = ColorHelper::RGBtoHSV($rgb);
+            $hsl = ColorHelper::RGBtoHSL($rgb);
 
+            VarDumper::dump($rgb);
             VarDumper::dump($hsv);
-            $paint->hsv_h = $hsv[0];
-            $paint->hsv_s = $hsv[1];
-            $paint->hsv_v = $hsv[2];
+            VarDumper::dump($hsl);
+
+            $paint->rgb = $rgb;
+            $paint->hsv = $hsv;
+            $paint->hsl = $hsl;
 
             $paint->save();
         }

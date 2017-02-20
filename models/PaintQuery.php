@@ -3,6 +3,7 @@
 namespace app\models;
 
 use yii\db\ActiveQuery;
+use yii\db\Expression;
 
 /**
  * This is the ActiveQuery class for [[Paint]].
@@ -96,7 +97,34 @@ class PaintQuery extends ActiveQuery
      */
     public function byColor()
     {
-        return $this->orderBy(['hsv_h' => SORT_ASC]);
+        return $this->addSelect('*')
+            ->addSelect(new Expression('CASE WHEN hex_code == \'transp\' THEN 1 ELSE 0 END AS is_transp'))
+            ->addSelect(new Expression("CASE
+                  WHEN hsl_l >= 95
+                    THEN 1
+                  ELSE
+                    CASE WHEN hsl_l <= 5 OR hsl_l + hsl_s < 40 AND hsl_l <= 20
+                      THEN 3
+                      ELSE 2
+                    END
+                  END AS lightness_group"))
+            ->addSelect(new Expression('CASE WHEN hsl_s < 15 THEN 1 ELSE 0 END AS saturation_group'))
+            ->addSelect(new Expression('CAST(hsl_h/30 AS INT) AS color_group'))
+            ->addOrderBy([ 'is_transp'        => SORT_DESC,
+                           'lightness_group'  => SORT_ASC,
+                           'saturation_group' => SORT_ASC,
+                           'color_group'      => SORT_ASC,
+                           'hsl_s'            => SORT_DESC,
+                           'hsl_l'            => SORT_DESC
+            ]);
+    }
+
+    /**
+     * @return PaintQuery
+     */
+    public function byIsMetal()
+    {
+        return $this->addOrderBy(['is_metal' => SORT_ASC]);
     }
 
     /**

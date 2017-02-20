@@ -2,6 +2,9 @@
 
 namespace app\components;
 
+use app\models\HSL;
+use app\models\HSV;
+use app\models\RGB;
 use yii\helpers\VarDumper;
 
 /**
@@ -24,8 +27,10 @@ class ColorHelper
     }
 
     /**
+     * Converts hex code string to RGB-model
+     *
      * @param string $hex
-     * @return array
+     * @return RGB
      *
      * @link https://bavotasan.com/2011/convert-hex-color-to-rgb-using-php/
      */
@@ -42,13 +47,16 @@ class ColorHelper
             $g = hexdec(substr($hex, 2, 2));
             $b = hexdec(substr($hex, 4, 2));
         }
-        $rgb = array( $r, $g, $b );
-        //return implode(",", $rgb); // returns the rgb values separated by commas
-        return $rgb; // returns an array with the rgb values
+
+        $rgb = new RGB($r, $g, $b);
+
+        return $rgb; // returns an model with the rgb values
     }
 
     /**
-     * @param array $rgb
+     * Converts RGB-model to hex code string
+     *
+     * @param RGB $rgb
      * @return string
      *
      * @link https://bavotasan.com/2011/convert-hex-color-to-rgb-using-php/
@@ -56,28 +64,30 @@ class ColorHelper
     public static function RGBtoHEX($rgb)
     {
         $hex = "#";
-        $hex .= str_pad(dechex($rgb[0]), 2, "0", STR_PAD_LEFT);
-        $hex .= str_pad(dechex($rgb[1]), 2, "0", STR_PAD_LEFT);
-        $hex .= str_pad(dechex($rgb[2]), 2, "0", STR_PAD_LEFT);
+        $hex .= str_pad(dechex($rgb->r), 2, "0", STR_PAD_LEFT);
+        $hex .= str_pad(dechex($rgb->g), 2, "0", STR_PAD_LEFT);
+        $hex .= str_pad(dechex($rgb->b), 2, "0", STR_PAD_LEFT);
 
         return $hex; // returns the hex value including the number sign (#)
     }
 
     /**
-     * Licensed under the terms of the BSD License
+     * Converts RGB-model to HSV-model
      *
-     * @param array $rgb
-     * @return array
+     * @param RGB $rgb
+     * @param bool $roundToInteger Will round values to integer after calculations
+     * @return HSV
      *
      * @author Unsigned <http://stackoverflow.com/users/629493/unsigned>
      * @link http://stackoverflow.com/a/13887939
+     * @copyright Licensed under the terms of the BSD License
      */
-    public static function RGBtoHSV($rgb)    // RGB values:    0-255, 0-255, 0-255
+    public static function RGBtoHSV($rgb, $roundToInteger = true)    // RGB values:    0-255, 0-255, 0-255
     {                                // HSV values:    0-360, 0-100, 0-100
         // Convert the RGB byte-values to percentages
-        $R = ($rgb[0] / 255);
-        $G = ($rgb[1] / 255);
-        $B = ($rgb[2] / 255);
+        $R = ($rgb->r / 255);
+        $G = ($rgb->g / 255);
+        $B = ($rgb->b / 255);
 
         // Calculate a few basic values, the maximum value of R,G,B, the
         //   minimum value, and the difference of the two (chroma).
@@ -96,121 +106,149 @@ class ColorHelper
         //   below), so most applications simply substitute a Hue of zero.
         // Saturation will always be zero in this case, see below for details.
         if ($chroma == 0) {
-            return array( 0, 0, $computedV );
+            $HSV = new HSV(0, 0, $computedV);
+        } else {
+            // Saturation is also simple to compute, and is simply the chroma
+            //   over the Value (or Brightness)
+            // Again, multiplied by 100 to get a percentage.
+            $computedS = 100 * ($chroma / $maxRGB);
+
+            // Calculate Hue component
+            // Hue is calculated on the "chromacity plane", which is represented
+            //   as a 2D hexagon, divided into six 60-degree sectors. We calculate
+            //   the bisecting angle as a value 0 <= x < 6, that represents which
+            //   portion of which sector the line falls on.
+            if ($R == $minRGB) {
+                $h = 3 - (($G - $B) / $chroma);
+            } elseif ($B == $minRGB) {
+                $h = 1 - (($R - $G) / $chroma);
+            } else // $G == $minRGB
+            {
+                $h = 5 - (($B - $R) / $chroma);
+            }
+
+            // After we have the sector position, we multiply it by the size of
+            //   each sector's arc (60 degrees) to obtain the angle in degrees.
+            $computedH = 60 * $h;
+
+            $HSV = new HSV($computedH, $computedS, $computedV);
         }
 
-        // Saturation is also simple to compute, and is simply the chroma
-        //   over the Value (or Brightness)
-        // Again, multiplied by 100 to get a percentage.
-        $computedS = 100 * ($chroma / $maxRGB);
-
-        // Calculate Hue component
-        // Hue is calculated on the "chromacity plane", which is represented
-        //   as a 2D hexagon, divided into six 60-degree sectors. We calculate
-        //   the bisecting angle as a value 0 <= x < 6, that represents which
-        //   portion of which sector the line falls on.
-        if ($R == $minRGB) {
-            $h = 3 - (($G - $B) / $chroma);
-        } elseif ($B == $minRGB) {
-            $h = 1 - (($R - $G) / $chroma);
-        } else // $G == $minRGB
-        {
-            $h = 5 - (($B - $R) / $chroma);
+        if ($roundToInteger) {
+            $HSV->roundValues();
         }
 
-        // After we have the sector position, we multiply it by the size of
-        //   each sector's arc (60 degrees) to obtain the angle in degrees.
-        $computedH = 60 * $h;
-
-        return array( $computedH, $computedS, $computedV );
+        return $HSV;
     }
 
     /**
-     * @param $r
-     * @param $g
-     * @param $b
-     * @return array
+     * Converts RGB-model to HSL-model
+     *
+     * @param RGB $rgb
+     * @param bool $roundToInteger Will round values to integer after calculations
+     * @return HSL
      *
      * @link https://gist.github.com/brandonheyer/5254516
      */
-    public static function RGBtoHSL( $r, $g, $b ) {
-        $oldR = $r;
-        $oldG = $g;
-        $oldB = $b;
-        $r /= 255;
-        $g /= 255;
-        $b /= 255;
-        $max = max( $r, $g, $b );
-        $min = min( $r, $g, $b );
-        $h;
-        $s;
-        $l = ( $max + $min ) / 2;
+    public static function RGBtoHSL($rgb, $roundToInteger = true)
+    {
+        $r = $rgb->r / 255;
+        $g = $rgb->g / 255;
+        $b = $rgb->b / 255;
+        $max = max($r, $g, $b);
+        $min = min($r, $g, $b);
+
+        $h = 0;
+        $s = 0;
+        $l = ($max + $min) / 2;
         $d = $max - $min;
-        if( $d == 0 ){
+        if ($d == 0) {
             $h = $s = 0; // achromatic
         } else {
-            $s = $d / ( 1 - abs( 2 * $l - 1 ) );
-            switch( $max ){
+            $s = $d / (1 - abs(2 * $l - 1));
+            switch ($max) {
                 case $r:
-                    $h = 60 * fmod( ( ( $g - $b ) / $d ), 6 );
+                    $h = 60 * fmod((($g - $b) / $d), 6);
                     if ($b > $g) {
                         $h += 360;
                     }
                     break;
                 case $g:
-                    $h = 60 * ( ( $b - $r ) / $d + 2 );
+                    $h = 60 * (($b - $r) / $d + 2);
                     break;
                 case $b:
-                    $h = 60 * ( ( $r - $g ) / $d + 4 );
+                    $h = 60 * (($r - $g) / $d + 4);
                     break;
             }
         }
-        return array( round( $h, 2 ), round( $s, 2 ), round( $l, 2 ) );
+        //$HSL = new HSL( round($h, 2), round($s, 2), round($l, 2) );
+        $HSL = new HSL( round($h, 2), round($s*100, 2), round($l*100, 2) );
+
+        if ($roundToInteger) {
+            $HSL->roundValues();
+        }
+
+        return $HSL;
     }
 
     /**
-     * @param $h
-     * @param $s
-     * @param $l
-     * @return array
+     * Converts HSL-model to RGB-model
+     *
+     * @param HSL $hsl
+     * @return RGB
      *
      * @link https://gist.github.com/brandonheyer/5254516
      */
-    public static function HSLtoRGB( $h, $s, $l ){
-        $r;
-        $g;
-        $b;
-        $c = ( 1 - abs( 2 * $l - 1 ) ) * $s;
-        $x = $c * ( 1 - abs( fmod( ( $h / 60 ), 2 ) - 1 ) );
-        $m = $l - ( $c / 2 );
-        if ( $h < 60 ) {
+    public static function HSLtoRGB($hsl)
+    {
+        $h = $hsl->h;
+        $s = $hsl->s;
+        $l = $hsl->l;
+
+        $r = 0;
+        $g = 0;
+        $b = 0;
+
+        $c = (1 - abs(2 * $l - 1)) * $s;
+        $x = $c * (1 - abs(fmod(($h / 60), 2) - 1));
+        $m = $l - ($c / 2);
+        if ($h < 60) {
             $r = $c;
             $g = $x;
             $b = 0;
-        } else if ( $h < 120 ) {
-            $r = $x;
-            $g = $c;
-            $b = 0;
-        } else if ( $h < 180 ) {
-            $r = 0;
-            $g = $c;
-            $b = $x;
-        } else if ( $h < 240 ) {
-            $r = 0;
-            $g = $x;
-            $b = $c;
-        } else if ( $h < 300 ) {
-            $r = $x;
-            $g = 0;
-            $b = $c;
         } else {
-            $r = $c;
-            $g = 0;
-            $b = $x;
+            if ($h < 120) {
+                $r = $x;
+                $g = $c;
+                $b = 0;
+            } else {
+                if ($h < 180) {
+                    $r = 0;
+                    $g = $c;
+                    $b = $x;
+                } else {
+                    if ($h < 240) {
+                        $r = 0;
+                        $g = $x;
+                        $b = $c;
+                    } else {
+                        if ($h < 300) {
+                            $r = $x;
+                            $g = 0;
+                            $b = $c;
+                        } else {
+                            $r = $c;
+                            $g = 0;
+                            $b = $x;
+                        }
+                    }
+                }
+            }
         }
-        $r = ( $r + $m ) * 255;
-        $g = ( $g + $m ) * 255;
-        $b = ( $b + $m  ) * 255;
-        return array( floor( $r ), floor( $g ), floor( $b ) );
+        $r = ($r + $m) * 255;
+        $g = ($g + $m) * 255;
+        $b = ($b + $m) * 255;
+
+        return new RGB( floor($r), floor($g), floor($b) );
     }
 }
