@@ -4,6 +4,7 @@ namespace app\components;
 
 use app\models\HSL;
 use app\models\HSV;
+use app\models\Paint;
 use app\models\RGB;
 use yii\helpers\VarDumper;
 
@@ -250,5 +251,40 @@ class ColorHelper
         $b = ($b + $m) * 255;
 
         return new RGB( floor($r), floor($g), floor($b) );
+    }
+
+    /**
+     * @param Paint[] $paints
+     *
+     * @return Paint[]
+     */
+    public static function sort($paints)
+    {
+        $clearPaints = [];
+
+        $whitePaints = [];
+        $blackPaints = [];
+        $greyPaints = [];
+
+        $colouredPaints = [];
+
+        foreach($paints as $paint){
+            if($paint->hex_code == 'transp'){
+                $clearPaints[] = $paint;
+            } else {
+                if($paint->hsl_l >= 95){
+                    $whitePaints[] = $paint;
+                } elseif($paint->hsl_l <= 5 OR $paint->hsl_l + $paint->hsl_s < 40 AND $paint->hsl_l <= 20){
+                    $blackPaints[] = $paint;
+                } elseif($paint->hsl_s < 15) {
+                    $greyPaints[] = $paint;
+                } else {
+                    $colouredPaints[] = $paint;
+                }
+            }
+        }
+
+
+        return array_merge($clearPaints, $whitePaints, $colouredPaints, $greyPaints, $blackPaints);
     }
 }

@@ -39,4 +39,29 @@ class DataController extends Controller
             $paint->save();
         }
     }
+
+    public function actionSortColors()
+    {
+        $paints = Paint::find()->all();
+
+        foreach($paints as $paint){
+            $hex = $paint->hex_code;
+            if(strpos($paint->hex_code, '#') === false){
+                $hex = '#FFFFFF';
+            }
+            $rgb = ColorHelper::HEXtoRGB($hex);
+            $hsv = ColorHelper::RGBtoHSV($rgb);
+            $hsl = ColorHelper::RGBtoHSL($rgb);
+
+            VarDumper::dump($rgb);
+            VarDumper::dump($hsv);
+            VarDumper::dump($hsl);
+
+            $paint->rgb = $rgb;
+            $paint->hsv = $hsv;
+            $paint->hsl = $hsl;
+
+            $paint->save();
+        }
+    }
 }

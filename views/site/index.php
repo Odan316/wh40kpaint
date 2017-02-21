@@ -4,6 +4,7 @@
  * @var $this yii\web\View
  */
 
+use app\components\ColorHelper;
 use app\models\Paint;
 
 $this->title = Yii::$app->name;
@@ -14,7 +15,7 @@ $this->title = Yii::$app->name;
 
     <h3 class="text-center">for Games Workshop Citadel Miniatures</h3>
 
-    <?= $this->render('paints/_paints_chart', [ 'paints' => Paint::find()->byIsMetal()->byColor()->all() ]) ?>
+    <?= $this->render('paints/_paints_chart', [ 'paints' => ColorHelper::sort(Paint::find()->all()) ]) ?>
 <?php /*
     <?= $this->render('paints/_paints_chart', [ 'paints' => Paint::find()->bases()->byIsMetal()->byColor()->all() ]) ?>
     <?= $this->render('paints/_paints_chart', [ 'paints' => Paint::find()->layers()->byIsMetal()->byColor()->all() ]) ?>
