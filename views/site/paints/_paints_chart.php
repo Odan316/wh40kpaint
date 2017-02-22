@@ -27,7 +27,10 @@ use app\models\Paint;
                     <?php } else { ?>
                         <div class="paintPreview <?= $addClass ?>">Clear</div>
                     <?php } ?>
-                    <h4 class="text-center <?= mb_strlen($paint->title) > 17 ? 'long' : '' ?>"><?= $paint->title ?></h4>
+                    <h4 class="text-center <?= mb_strlen($paint->title) > 15 ? 'long' : '' ?>"><?= $paint->title ?></h4>
+                    <span class="label label-default"><?= round($paint->hsl_h)  ?></span>
+                    <span class="label label-default"><?= round($paint->hsl_s)  ?></span>
+                    <span class="label label-default"><?= round($paint->hsl_l)  ?></span>
                 </div>
             </div>
         <?php } ?>

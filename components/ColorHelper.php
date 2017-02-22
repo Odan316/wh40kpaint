@@ -6,6 +6,7 @@ use app\models\HSL;
 use app\models\HSV;
 use app\models\Paint;
 use app\models\RGB;
+use yii\helpers\ArrayHelper;
 use yii\helpers\VarDumper;
 
 /**
@@ -266,7 +267,7 @@ class ColorHelper
         $blackPaints = [];
         $greyPaints = [];
 
-        $colouredPaints = [];
+        $colourGroups = [];
 
         foreach($paints as $paint){
             if($paint->hex_code == 'transp'){
@@ -279,12 +280,40 @@ class ColorHelper
                 } elseif($paint->hsl_s < 15) {
                     $greyPaints[] = $paint;
                 } else {
-                    $colouredPaints[] = $paint;
+                    $colourGroup = round($paint->hsl_h/30);
+                    if($colourGroup == 0) {$colourGroup = 13;}
+                    $colourGroups[(int)$colourGroup][]= $paint;
                 }
             }
         }
+        $result = [];
+        ksort($colourGroups);
+        foreach($colourGroups as $group){
+            $result = array_merge($result, self::sortNearest($group));
+        }
+
+        VarDumper::dump($colourGroups, 1, 1);
 
 
-        return array_merge($clearPaints, $whitePaints, $colouredPaints, $greyPaints, $blackPaints);
+        return $result;//array_merge($clearPaints, $whitePaints, $greyPaints, $blackPaints);
+    }
+
+    /**
+     * @param Paint[] $paints
+     *
+     * @return Paint[]
+     */
+    private static function sortNearest($paints)
+    {
+        $sorted = [];
+
+        $hsl_h = 0;
+        $hsl_l = 0;
+        $hsl_s = 0;
+
+        AdvArrayHelper::multisort($paints, ['hsl_l', 'hsl_s', 'hsl_h'], [SORT_DESC, SORT_ASC, SORT_ASC]);
+
+
+        return $paints;
     }
 }
