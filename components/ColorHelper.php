@@ -7,7 +7,6 @@ use app\models\HSV;
 use app\models\Paint;
 use app\models\RGB;
 use yii\helpers\ArrayHelper;
-use yii\helpers\VarDumper;
 
 /**
  * Class ColorHelper
@@ -184,7 +183,7 @@ class ColorHelper
             }
         }
         //$HSL = new HSL( round($h, 2), round($s, 2), round($l, 2) );
-        $HSL = new HSL( round($h, 2), round($s*100, 2), round($l*100, 2) );
+        $HSL = new HSL(round($h, 2), round($s * 100, 2), round($l * 100, 2));
 
         if ($roundToInteger) {
             $HSL->roundValues();
@@ -251,7 +250,7 @@ class ColorHelper
         $g = ($g + $m) * 255;
         $b = ($b + $m) * 255;
 
-        return new RGB( floor($r), floor($g), floor($b) );
+        return new RGB(floor($r), floor($g), floor($b));
     }
 
     /**
@@ -261,41 +260,65 @@ class ColorHelper
      */
     public static function sort($paints)
     {
-        $clearPaints = [];
+        $clearPaints = [ ];
 
-        $whitePaints = [];
-        $blackPaints = [];
-        $greyPaints = [];
+        $whitePaints = [ ];
+        $blackPaints = [ ];
+        $greyPaints = [ ];
 
-        $colourGroups = [];
+        $colourGroups = [
+            [ '1', 'red', 0, 15 ],
+            [ '2', 'orange', 16, 40 ],
+            [ '3', 'yellow', 41, 60 ],
+            [ '4', 'light green', 61, 85 ],
+            [ '5', 'dark green', 86, 135 ],
+            [ '6', 'marine', 136, 180 ],
+            [ '7', 'light blue', 181, 200 ],
+            [ '8', 'blue', 201, 225 ],
+            [ '9', 'dark blue', 226, 250 ],
+            [ '10', 'violet', 251, 280 ],
+            [ '11', 'fuchsia', 281, 335 ],
+            [ '12', 'pink', 336, 345 ],
+            [ '13', 'red', 346, 360 ]
+        ];
 
-        foreach($paints as $paint){
-            if($paint->hex_code == 'transp'){
+        $colours = [ ];
+
+        foreach ($paints as $paint) {
+            if ($paint->hex_code == 'transp') {
                 $clearPaints[] = $paint;
             } else {
-                if($paint->hsl_l >= 95){
+                if ($paint->hsl_l >= 90) {
                     $whitePaints[] = $paint;
-                } elseif($paint->hsl_l <= 5 OR $paint->hsl_l + $paint->hsl_s < 40 AND $paint->hsl_l <= 20){
+                } elseif ($paint->hsl_l <= 5 OR $paint->hsl_l + $paint->hsl_s < 40 AND $paint->hsl_l <= 20) {
                     $blackPaints[] = $paint;
-                } elseif($paint->hsl_s < 15) {
+                } elseif ($paint->hsl_s < 15) {
                     $greyPaints[] = $paint;
                 } else {
-                    $colourGroup = round($paint->hsl_h/30);
-                    if($colourGroup == 0) {$colourGroup = 13;}
-                    $colourGroups[(int)$colourGroup][]= $paint;
+                    $colourGroup = array_filter($colourGroups, function ($var) use ($paint) {
+                        return ($paint->hsl_h >= $var[2] && $paint->hsl_h <= $var[3]);
+                    });
+                    $colourGroup = array_shift($colourGroup);
+                    $colours[$colourGroup[0]][] = $paint;
                 }
             }
         }
-        $result = [];
-        ksort($colourGroups);
-        foreach($colourGroups as $group){
-            $result = array_merge($result, self::sortNearest($group));
+
+        // Sort white paints
+        self::sortByColour($whitePaints);
+        // Sort black paints
+        self::sortByColour($blackPaints);
+        // Sort grey paints
+        self::sortByColour($greyPaints);
+
+
+        $coloursSorted = [ ];
+        ksort($colours);
+        foreach ($colours as $group) {
+            $coloursSorted = array_merge($coloursSorted, self::sortColorGroup($group));
         }
 
-        VarDumper::dump($colourGroups, 1, 1);
-
-
-        return $result;//array_merge($clearPaints, $whitePaints, $greyPaints, $blackPaints);
+        return array_merge($clearPaints, $whitePaints, $coloursSorted, $greyPaints, $blackPaints);
     }
 
     /**
@@ -303,17 +326,30 @@ class ColorHelper
      *
      * @return Paint[]
      */
-    private static function sortNearest($paints)
+    private static function sortColorGroup($paints)
     {
-        $sorted = [];
+        $bright = [ ];
+        $pale = [ ];
 
-        $hsl_h = 0;
-        $hsl_l = 0;
-        $hsl_s = 0;
+        foreach ($paints as $paint) {
+            if ($paint->hsl_s > 50) {
+                $bright[] = $paint;
+            } else {
+                $pale[] = $paint;
+            }
+        }
 
-        AdvArrayHelper::multisort($paints, ['hsl_l', 'hsl_s', 'hsl_h'], [SORT_DESC, SORT_ASC, SORT_ASC]);
+        self::sortByColour($bright);
+        self::sortByColour($pale);
 
+        return array_merge($bright, $pale);
+    }
 
-        return $paints;
+    /**
+     * @param Paint[] $paints
+     */
+    private static function sortByColour(&$paints)
+    {
+        ArrayHelper::multisort($paints, [ 'hsl_l','hsl_s', 'hsl_h' ], [ SORT_DESC, SORT_DESC, SORT_ASC ]);
     }
 }

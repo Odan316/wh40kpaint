@@ -17,8 +17,6 @@ $this->title = Yii::$app->name;
 
     <?= $this->render('paints/_paints_chart', [ 'paints' => ColorHelper::sort(Paint::find()->all()) ]) ?>
 
-    <?= $this->render('paints/_paints_chart', [ 'paints' => Paint::find()->byIsMetal()->byColor()->all() ]) ?>
-<?php /*
     <?= $this->render('paints/_paints_chart', [ 'paints' => Paint::find()->bases()->byIsMetal()->byColor()->all() ]) ?>
     <?= $this->render('paints/_paints_chart', [ 'paints' => Paint::find()->layers()->byIsMetal()->byColor()->all() ]) ?>
     <?= $this->render('paints/_paints_chart', [ 'paints' => Paint::find()->shades()->byIsMetal()->byColor()->all() ]) ?>
@@ -29,5 +27,5 @@ $this->title = Yii::$app->name;
     <?= $this->render('paints/_paints_chart', [ 'paints' => Paint::find()->technical()->byIsMetal()->byColor()->all() ]) ?>
     <?= $this->render('paints/_paints_chart', [ 'paints' => Paint::find()->sprays()->byIsMetal()->byColor()->all() ]) ?>
     <?= $this->render('paints/_paints_chart', [ 'paints' => Paint::find()->air()->byIsMetal()->byColor()->all() ]) ?>
-*/?>
+
 </div>

@@ -4,11 +4,10 @@
  * @var Paint[] $paints
  */
 use app\models\Paint;
-
 ?>
 <?php if (count($paints)) { ?>
     <div class="row">
-        <h3><?= $paints[0]->typeName ?>&nbsp;(<?= count($paints) ?>)</h3>
+        <h3><?= empty($paints) ? $paints[0]->typeName : '' ?>&nbsp;(<?= count($paints) ?>)</h3>
         <?php foreach ($paints as $paint) {
             $addClass = '';
             if ($paint->is_metal) {
