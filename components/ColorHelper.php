@@ -279,7 +279,7 @@ class ColorHelper
             [ '10', 'violet', 251, 280 ],
             [ '11', 'fuchsia', 281, 335 ],
             [ '12', 'pink', 336, 345 ],
-            [ '13', 'red', 346, 360 ]
+            [ '1', 'red', 346, 360 ]
         ];
 
         $colours = [ ];
@@ -288,7 +288,7 @@ class ColorHelper
             if ($paint->hex_code == 'transp') {
                 $clearPaints[] = $paint;
             } else {
-                if ($paint->hsl_l >= 90) {
+                if ($paint->hsl_l >= 94) {
                     $whitePaints[] = $paint;
                 } elseif ($paint->hsl_l <= 5 OR $paint->hsl_l + $paint->hsl_s < 40 AND $paint->hsl_l <= 20) {
                     $blackPaints[] = $paint;
