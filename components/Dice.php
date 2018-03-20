@@ -12,7 +12,7 @@ namespace app\components;
 class Dice
 {
 
-    public static $min;
+    public static $min = 1;
     public static $max;
 
     public $value;

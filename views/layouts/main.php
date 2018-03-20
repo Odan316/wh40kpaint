@@ -34,8 +34,13 @@ AppAsset::register($this);
         ],
     ]);
     echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => []
+        'options' => ['class' => 'navbar-nav navbar-left'],
+        'items' => [
+            [
+                'label' => Yii::t('app', 'Dice Stat'),
+                'url'   => ['dice/index']
+            ]
+        ]
     ]);
     NavBar::end();
     ?>

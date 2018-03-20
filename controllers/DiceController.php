@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\models\forms\DiceForm;
+use Yii;
 use yii\web\Controller;
 
 /**
@@ -20,7 +22,13 @@ class DiceController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $model = new DiceForm();
+        if ($model->load(Yii::$app->request->post()) && $model->calculate()) {
+            return $this->goBack();
+        }
+        return $this->render('index',[
+            'model' => $model
+        ]);
     }
 
 }
