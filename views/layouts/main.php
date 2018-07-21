@@ -1,6 +1,7 @@
 <?php
 
 /* @var $this \yii\web\View */
+
 /* @var $content string */
 
 use yii\helpers\Html;
@@ -27,20 +28,46 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => Html::img('/favicon.png').'&nbsp;Wh40kPaint ',
-        'brandUrl' => Yii::$app->homeUrl,
-        'options' => [
+        'brandLabel' => Html::img('/favicon.png') . '&nbsp;Wh40kPaint ',
+        'brandUrl'   => Yii::$app->homeUrl,
+        'options'    => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-left'],
-        'items' => [
+        'items'   => [
+            [
+                'label' => Yii::t('app', 'Paints chart'),
+                'url'   => ['paints/index']
+            ],
             [
                 'label' => Yii::t('app', 'Dice Stat'),
                 'url'   => ['dice/index']
             ]
         ]
+    ]);
+
+    $rightItems = [
+        [
+            'label' => Yii::t('app', 'Admin'),
+            'url'   => ['admin/index']
+        ]
+    ];
+    if (!Yii::$app->user->isGuest) {
+        $rightItems[] = '<li>'
+            . Html::beginForm(['/site/logout'], 'post')
+            . Html::submitButton(
+                'Logout (' . Yii::$app->user->identity->username . ')',
+                ['class' => 'btn btn-link logout']
+            )
+            . Html::endForm()
+            . '</li>';
+    }
+
+    echo Nav::widget([
+        'options' => ['class' => 'navbar-nav navbar-right'],
+        'items'   => $rightItems
     ]);
     NavBar::end();
     ?>

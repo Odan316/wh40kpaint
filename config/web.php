@@ -5,6 +5,10 @@ $params = array_merge(
     require(__DIR__ . '/params-local.php')
 );
 
+
+$indexActions = "login|logout";
+$controllersList = "paints|dice";
+
 $config = [
     'id' => 'basic',
     'name' => 'Wh40kPaint',
@@ -46,6 +50,11 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                '<action:(' . $indexActions . ')>'                          => 'site/<action>',
+                '<controller:(' . $controllersList . ')>'                   => '<controller>/index',
+                '<controller:(' . $controllersList . ')>/<id:\d+>'          => '<controller>/index',
+                '<controller:(' . $controllersList . ')>/<action>/<id:\d+>' => '<controller>/<action>',
+                '<controller:(' . $controllersList . ')>/<action>'          => '<controller>/<action>',
                 'login' => 'site/login',
                 'admin/paint' => 'admin-paint/index',
                 'admin/paint/<action:[\w|\-]+>' => 'admin-paint/<action>'

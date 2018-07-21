@@ -1,6 +1,7 @@
 <?php
 
 /* @var $this \yii\web\View */
+
 /* @var $content string */
 
 use app\assets\AdminAsset;
@@ -29,35 +30,37 @@ AdminAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => Html::img('/favicon.png').'&nbsp;Wh40kPaint ',
-        'brandUrl' => Yii::$app->homeUrl,
-        'options' => [
+        'brandLabel' => Html::img('/favicon.png') . '&nbsp;Wh40kPaint ',
+        'brandUrl'   => Yii::$app->homeUrl,
+        'options'    => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-left'],
-        'items' => [
+        'items'   => [
             [
                 'label' => 'Paints',
-                'url' => ['admin/paint']
+                'url'   => ['admin/paint']
             ]
         ]
     ]);
+
+    $rightItems = [];
+    if (!Yii::$app->user->isGuest) {
+        $rightItems[] = '<li>'
+            . Html::beginForm(['/site/logout'], 'post')
+            . Html::submitButton(
+                'Logout (' . Yii::$app->user->identity->username . ')',
+                ['class' => 'btn btn-link logout']
+            )
+            . Html::endForm()
+            . '</li>';
+    }
+
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' =>
-            Yii::$app->user->isGuest ? [] : ([
-                '<li>'
-                . Html::beginForm(['/site/logout'], 'post')
-                . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'btn btn-link logout']
-                )
-                . Html::endForm()
-                . '</li>'
-            ])
-        ,
+        'items'   => $rightItems
     ]);
     NavBar::end();
     ?>

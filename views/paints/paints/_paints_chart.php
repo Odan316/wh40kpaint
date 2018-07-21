@@ -3,7 +3,9 @@
  * @var $this yii\web\View
  * @var Paint[] $paints
  */
+
 use app\models\Paint;
+
 ?>
 <?php if (count($paints)) { ?>
     <div class="row">
@@ -13,7 +15,7 @@ use app\models\Paint;
             if ($paint->is_metal) {
                 $addClass = 'metallic';
             }
-            if (in_array($paint->type, [ Paint::TYPE_SHADE, Paint::TYPE_GLAZE ])) {
+            if (in_array($paint->type, [Paint::TYPE_SHADE, Paint::TYPE_GLAZE])) {
                 $addClass = 'fleck';
             }
 
@@ -27,9 +29,11 @@ use app\models\Paint;
                         <div class="paintPreview <?= $addClass ?>">Clear</div>
                     <?php } ?>
                     <h4 class="text-center <?= mb_strlen($paint->title) > 15 ? 'long' : '' ?>"><?= $paint->title ?></h4>
-                    <span class="label label-default"><?= round($paint->hsl_h)  ?></span>
-                    <span class="label label-default"><?= round($paint->hsl_s)  ?></span>
-                    <span class="label label-default"><?= round($paint->hsl_l)  ?></span>
+                    <?php if (YII_ENV_DEV) { ?>
+                        <span class="label label-default"><?= round($paint->hsl_h) ?></span>
+                        <span class="label label-default"><?= round($paint->hsl_s) ?></span>
+                        <span class="label label-default"><?= round($paint->hsl_l) ?></span>
+                    <?php } ?>
                 </div>
             </div>
         <?php } ?>

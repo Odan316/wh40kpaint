@@ -3,10 +3,13 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use app\models\Paint;
 
-/* @var $this yii\web\View */
-/* @var $searchModel app\models\PaintSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+/**
+ * @var $this yii\web\View
+ * @var $searchModel app\models\PaintSearch
+ * @var $dataProvider yii\data\ActiveDataProvider
+ */
 
 $this->title = Yii::t('app', 'Paints');
 $this->params['breadcrumbs'][] = $this->title;
@@ -25,7 +28,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel'  => $searchModel,
         'tableOptions' => ['class' => 'table table-striped table-bordered paintsTable'],
         'columns'      => [
-            [ 'class' => 'yii\grid\SerialColumn' ],
             [
                 'attribute' => 'id',
                 'headerOptions' => ['class' => 'idColumn']
@@ -34,7 +36,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'type',
                 'value'     => function ($model) {
                     return $model->typeName;
-                }
+                },
+                'filter'    => Paint::getTypes(),
             ],
             'title',
             [
