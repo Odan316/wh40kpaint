@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "paint".
@@ -30,7 +31,7 @@ use Yii;
  *
  * @see PaintQuery
  */
-class Paint extends \yii\db\ActiveRecord
+class Paint extends ActiveRecord
 {
     const TYPE_BASE = 10;
     const TYPE_LAYER = 20;
@@ -125,13 +126,13 @@ class Paint extends \yii\db\ActiveRecord
     }
 
     /**
-     * @param integer|null $type
      * @return string
      */
-    public function getTypeName($type = null)
+    public function getTypeName()
     {
-        return isset(self::getTypes()[$this->type]) ? self::getTypes()[$this->type] : Yii::t('app',
-            'Unknown paint type');
+        return isset(self::getTypes()[$this->type])
+            ? self::getTypes()[$this->type]
+            : Yii::t('app', 'Unknown paint type');
     }
 
     /**
@@ -181,13 +182,14 @@ class Paint extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return HSL
+     * @return HSV
      */
     public function getHSV()
     {
         if ($this->_hsv == null) {
             $this->_hsv = new HSV($this->hsv_h, $this->hsv_s, $this->hsv_v);
         }
+
         return $this->_hsv;
     }
 
