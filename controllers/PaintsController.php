@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\search\PaintSearch;
 use Yii;
 use yii\web\Controller;
 
@@ -21,7 +22,12 @@ class PaintsController extends Controller
      */
     public function actionIndex()
     {
+        $searchModel = new PaintSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         return $this->render('index',[
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 

@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\components\ColorHelper;
 use Yii;
 use yii\db\ActiveRecord;
 
@@ -64,20 +65,20 @@ class Paint extends ActiveRecord
     public function rules()
     {
         return [
-            [ [ 'type', 'title', 'hex_code', 'is_metal' ], 'required' ],
-            [ [ 'type' ], 'integer' ],
-            [ [ 'title' ], 'string', 'max' => 32 ],
-            [ [ 'hex_code' ], 'string', 'max' => 8 ],
+            [['type', 'title', 'hex_code', 'is_metal'], 'required'],
+            [['type'], 'integer'],
+            [['title'], 'string', 'max' => 32],
+            [['hex_code'], 'string', 'max' => 8],
             [
                 'type',
                 'in',
                 'range' => array_keys(self::getTypes())
             ],
-            [ [ 'is_metal' ], 'boolean' ],
-            [ [ 'is_metal' ], 'default', 'value' => false ],
-            [ [ 'rgb_r', 'rgb_g', 'rgb_b' ], 'integer' ],
-            [ [ 'hsv_h', 'hsv_s', 'hsv_v' ], 'integer' ],
-            [ [ 'hsl_h', 'hsl_s', 'hsl_l' ], 'integer' ]
+            [['is_metal'], 'boolean'],
+            [['is_metal'], 'default', 'value' => false],
+            [['rgb_r', 'rgb_g', 'rgb_b'], 'integer'],
+            [['hsv_h', 'hsv_s', 'hsv_v'], 'integer'],
+            [['hsl_h', 'hsl_s', 'hsl_l'], 'integer']
         ];
     }
 
@@ -124,6 +125,25 @@ class Paint extends ActiveRecord
             self::TYPE_AIR       => Yii::t('app', 'Air')
         ];
     }
+
+    public static function getColorGroups()
+    {
+        return [
+            ColorHelper::GROUP_RED         => Yii::t('app', 'Red'),
+            ColorHelper::GROUP_ORANGE      => Yii::t('app', 'Orange'),
+            ColorHelper::GROUP_YELLOW      => Yii::t('app', 'Yellow'),
+            ColorHelper::GROUP_LIGHT_GREEN => Yii::t('app', 'Light green'),
+            ColorHelper::GROUP_DARK_GREEN  => Yii::t('app', 'Dark green'),
+            ColorHelper::GROUP_MARINE      => Yii::t('app', 'Marine'),
+            ColorHelper::GROUP_LIGHT_BLUE  => Yii::t('app', 'Light blue'),
+            ColorHelper::GROUP_BLUE        => Yii::t('app', 'Blue'),
+            ColorHelper::GROUP_DARK_BLUE   => Yii::t('app', 'Dark blue'),
+            ColorHelper::GROUP_VIOLET      => Yii::t('app', 'Violet'),
+            ColorHelper::GROUP_FUCHSIA     => Yii::t('app', 'Fuchsia'),
+            ColorHelper::GROUP_PINK        => Yii::t('app', 'Pink'),
+        ];
+    }
+
 
     /**
      * @return string

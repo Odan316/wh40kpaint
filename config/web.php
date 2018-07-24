@@ -60,6 +60,21 @@ $config = [
                 'admin/paint/<action:[\w|\-]+>' => 'admin-paint/<action>'
             ],
         ],
+        'i18n'         => [
+            'translations' => [
+                'app*' => [
+                    'class'          => 'yii\i18n\GettextMessageSource',
+                    'basePath'       => '@messages',
+                    'sourceLanguage' => 'en',
+                ],
+                'yii'           => [
+                    'class'          => 'yii\i18n\GettextMessageSource',
+                    'basePath'       => '@messages',
+                    'sourceLanguage' => 'en',
+                    'catalog'        => 'yii'
+                ],
+            ],
+        ],
     ],
     'params' => $params,
 ];

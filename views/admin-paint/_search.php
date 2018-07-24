@@ -1,11 +1,14 @@
 <?php
 
+use app\models\search\PaintSearchAdmin;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-/* @var $this yii\web\View */
-/* @var $model app\models\PaintSearch */
-/* @var $form yii\widgets\ActiveForm */
+/**
+ * @var $this yii\web\View
+ * @var $model PaintSearchAdmin
+ * @var $form yii\widgets\ActiveForm
+ */
 ?>
 
 <div class="paint-search">

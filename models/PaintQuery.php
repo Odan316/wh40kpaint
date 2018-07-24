@@ -13,6 +13,15 @@ use yii\db\Expression;
 class PaintQuery extends ActiveQuery
 {
     /**
+     * @param $typeId
+     * @return PaintQuery
+     */
+    public function hasType($typeId)
+    {
+        return $this->andWhere(['type' => $typeId]);
+    }
+
+    /**
      * @return PaintQuery
      */
     public function bases()

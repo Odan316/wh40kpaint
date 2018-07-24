@@ -2,9 +2,9 @@
 
 namespace app\controllers;
 
+use app\models\search\PaintSearchAdmin;
 use Yii;
 use app\models\Paint;
-use app\models\PaintSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -37,7 +37,7 @@ class AdminPaintController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new PaintSearch();
+        $searchModel = new PaintSearchAdmin();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -50,6 +50,7 @@ class AdminPaintController extends Controller
      * Displays a single Paint model.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException
      */
     public function actionView($id)
     {
@@ -81,6 +82,7 @@ class AdminPaintController extends Controller
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException
      */
     public function actionUpdate($id)
     {
@@ -100,6 +102,8 @@ class AdminPaintController extends Controller
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException
+     * @throws \yii\db\StaleObjectException
      */
     public function actionDelete($id)
     {

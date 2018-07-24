@@ -16,9 +16,40 @@ use yii\helpers\ArrayHelper;
  */
 class ColorHelper
 {
+    const GROUP_RED = '1';
+    const GROUP_ORANGE = '2';
+    const GROUP_YELLOW = '3';
+    const GROUP_LIGHT_GREEN = '4';
+    const GROUP_DARK_GREEN = '5';
+    const GROUP_MARINE = '6';
+    const GROUP_LIGHT_BLUE = '7';
+    const GROUP_BLUE = '8';
+    const GROUP_DARK_BLUE = '9';
+    const GROUP_VIOLET = '10';
+    const GROUP_FUCHSIA = '11';
+    const GROUP_PINK = '12';
+
+    public static function getColorGroups(){
+        return [
+            [ '1', 'red', 0, 15 ],
+            [ '2', 'orange', 16, 40 ],
+            [ '3', 'yellow', 41, 60 ],
+            [ '4', 'light green', 61, 85 ],
+            [ '5', 'dark green', 86, 135 ],
+            [ '6', 'marine', 136, 180 ],
+            [ '7', 'light blue', 181, 200 ],
+            [ '8', 'blue', 201, 225 ],
+            [ '9', 'dark blue', 226, 250 ],
+            [ '10', 'violet', 251, 280 ],
+            [ '11', 'fuchsia', 281, 335 ],
+            [ '12', 'pink', 336, 345 ],
+            [ '1', 'red', 346, 360 ]
+        ];
+    }
+
     /**
      * @param string $hex
-     * @return array
+     * @return HSV
      */
     public static function HEXtoHSV($hex)
     {

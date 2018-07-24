@@ -7,7 +7,7 @@ use app\models\Paint;
 
 /**
  * @var $this yii\web\View
- * @var $searchModel app\models\PaintSearch
+ * @var $searchModel app\models\search\PaintSearchAdmin
  * @var $dataProvider yii\data\ActiveDataProvider
  */
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\models\search;
 
 use Yii;
 use yii\base\Model;
@@ -8,9 +8,9 @@ use yii\data\ActiveDataProvider;
 use app\models\Paint;
 
 /**
- * PaintSearch represents the model behind the search form about `app\models\Paint`.
+ * PaintSearchAdmin represents the model behind the search form about `app\models\Paint`.
  */
-class PaintSearch extends Paint
+class PaintSearchAdmin extends Paint
 {
     /**
      * @inheritdoc

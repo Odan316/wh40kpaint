@@ -2,6 +2,8 @@
 
 /**
  * @var $this yii\web\View
+ * @var $searchModel app\models\search\PaintSearch
+ * @var $dataProvider yii\data\ActiveDataProvider
  */
 
 use app\components\ColorHelper;
@@ -15,16 +17,14 @@ $this->title = Yii::$app->name;
 
     <h3 class="text-center">for Games Workshop Citadel Miniatures</h3>
 
+    <?= $this->render('index/_search', [
+            'model' => $searchModel
+    ]); ?>
 
-    <?= $this->render('paints/_paints_chart', [ 'paints' => ColorHelper::sort(Paint::find()->bases()->all()) ]) ?>
-    <?= $this->render('paints/_paints_chart', [ 'paints' => ColorHelper::sort(Paint::find()->layers()->all()) ]) ?>
-    <?= $this->render('paints/_paints_chart', [ 'paints' => ColorHelper::sort(Paint::find()->shades()->all()) ]) ?>
-    <?= $this->render('paints/_paints_chart', [ 'paints' => ColorHelper::sort(Paint::find()->dry()->all()) ]) ?>
-    <?= $this->render('paints/_paints_chart', [ 'paints' => ColorHelper::sort(Paint::find()->glazes()->all()) ]) ?>
-    <?= $this->render('paints/_paints_chart', [ 'paints' => ColorHelper::sort(Paint::find()->edge()->all()) ]) ?>
-    <?= $this->render('paints/_paints_chart', [ 'paints' => ColorHelper::sort(Paint::find()->textures()->all()) ]) ?>
-    <?= $this->render('paints/_paints_chart', [ 'paints' => ColorHelper::sort(Paint::find()->technical()->all()) ]) ?>
-    <?= $this->render('paints/_paints_chart', [ 'paints' => ColorHelper::sort(Paint::find()->sprays()->all()) ]) ?>
-    <?= $this->render('paints/_paints_chart', [ 'paints' => ColorHelper::sort(Paint::find()->air()->all()) ]) ?>
+    <?= $this->render('index/_paints_chart', [ 'paints' => ColorHelper::sort($dataProvider->getModels()) ]) ?>
+
+    <?php /*foreach (Paint::getTypes() as $typeId => $typeTitle) { ?>
+        <?= $this->render('index/_paints_chart', [ 'paints' => ColorHelper::sort(Paint::find()->hasType($typeId)->all()) ]) ?>
+    <?php } */?>
 
 </div>
