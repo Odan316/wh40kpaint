@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="tokc.shop" default="build">
+    <target name="build"
+            depends="prepare, composer, yii-migrations, mo-generate, set-links"
+            description=""/>
+
+    <target name="prepare"
+            unless="prepare.done"
+            description="Prepare for build">
+
+        <tstamp>
+            <format property="NOW_STAMP" pattern="yyyy-MM-dd_hh:mm" locale="en"/>
+        </tstamp>
+
+        <mkdir dir="${workspace}/../builds/${NOW_STAMP}"/>
+        <copy todir="${workspace}/../builds/${NOW_STAMP}">
+            <fileset dir="${workspace}"/>
+        </copy>
+
+        <symlink link="${workspace}/../builds/${NOW_STAMP}/vendor"
+                 resource="${workspace}/../shared/vendor" />
+
+        <chmod dir="${workspace}/../builds/${NOW_STAMP}/runtime" perm="777"/>
+        <chmod dir="${workspace}/../builds/${NOW_STAMP}/web/assets" perm="777"/>
+
+        <chmod file="${workspace}/../builds/${NOW_STAMP}/yii" perm="777"/>
+
+        <property name="prepare.done" value="true"/>
+    </target>
+
+    <target name="composer"
+            depends="prepare"
+            unless="composer.done"
+            description="Installing composer dependencies">
+        <exec executable="php" dir="${workspace}/../builds/${NOW_STAMP}" failonerror="true">
+            <arg value="composer.phar" />
+            <arg value="install" />
+        </exec>
+        <property name="composer.done" value="true"/>
+    </target>
+
+    <target name="yii-migrations"
+            depends="prepare"
+            unless="yii-migrations.done"
+            description="Applying Yii2 migrations">
+        <exec executable="${workspace}/../builds/${NOW_STAMP}/yii" failonerror="true">
+            <arg value="migrate" />
+            <arg value="--interactive=0" />
+        </exec>
+        <property name="yii-migrations.done" value="true"/>
+    </target>
+
+    <target name="mo-generate"
+            depends="prepare"
+            unless="mo-generate.done"
+            description="Generate .mo files from .po files">
+        <property name="mo-generate.done" value="true"/>
+    </target>
+
+    <target name="set-links"
+            unless="set-links.done"
+            depends="prepare, composer, yii-migrations, mo-generate"
+            description="Set links for build">
+        <symlink action="delete"
+                 link="${workspace}/../www"
+                 failonerror="true" />
+        <symlink link="${workspace}/../www"
+                 resource="${workspace}/../builds/${NOW_STAMP}"
+                 failonerror="true" />
+        <property name="set-links.done" value="true"/>
+    </target>
+
+</project>
