@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="tokc.shop" default="build">
+<project name="wh40k" default="build">
     <target name="build"
             depends="prepare, composer, yii-migrations, mo-generate, set-links"
             description=""/>
